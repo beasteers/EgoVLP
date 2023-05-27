@@ -3,7 +3,7 @@ from csv import reader
 import csv
 import pandas as pd
 
-metadata_dir = '/apdcephfs/private_qinghonglin/video_dataset/charades/CharadesEgo/'
+metadata_dir = 'dataset/charades/CharadesEgo/'
 split_files = {
     'train': 'CharadesEgo_v1_train_only1st.csv',
     'val': 'CharadesEgo_v1_test_only1st.csv',  # there is no test
@@ -16,7 +16,7 @@ target_split_fp = split_files[split]
 with open(os.path.join(metadata_dir, target_split_fp), 'r') as charades:
     csv_reader = list(reader(charades))[1:]
 
-path_metadata = "/apdcephfs/private_qinghonglin/video_dataset/charades/CharadesEgo/metadata_" + split + ".csv"
+path_metadata = "dataset/charades/CharadesEgo/metadata_" + split + ".csv"
 csv_metadata = open(path_metadata, 'w')
 
 metadata_reader = csv.writer(csv_metadata, delimiter='¥', lineterminator='\n',
@@ -26,7 +26,7 @@ header = 'id' + '\t' + 'cls' + '\t' + 't_start' + '\t' + 't_end' + '\t' + 'narra
 
 metadata_reader.writerow([header])
 
-mapping = pd.read_csv('/apdcephfs/private_qinghonglin/video_dataset/charades/CharadesEgo/Charades_v1_classes.txt', header=None)
+mapping = pd.read_csv('dataset/charades/CharadesEgo/Charades_v1_classes.txt', header=None)
 
 count = 0
 for row in csv_reader:
