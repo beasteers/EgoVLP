@@ -4,9 +4,9 @@ from torch import nn
 from tqdm.auto import tqdm
 import torch.distributed as dist
 
-from base import BaseTrainer, Multi_BaseTrainer_dist
-from model.model import sim_matrix
-from utils import inf_loop
+from egovlp.base import BaseTrainer, Multi_BaseTrainer_dist
+from egovlp.model.model import sim_matrix
+from egovlp.utils import inf_loop
 import os
 from csv import reader
 

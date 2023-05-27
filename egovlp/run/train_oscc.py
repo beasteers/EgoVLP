@@ -10,10 +10,10 @@ import data_loader.data_loader as module_data
 import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
-import utils.visualizer as module_vis
-from parse_config import ConfigParser
-from trainer import Multi_Trainer_dist_PNR
-from utils.util import replace_nested_dict_item
+import egovlp.utils.visualizer as module_vis
+from egovlp.parse_config import ConfigParser
+from trainer import Multi_Trainer_dist_OSCC
+from egovlp.utils.util import replace_nested_dict_item
 from tensorboardX import SummaryWriter
 
 ex = Experiment('train')
@@ -50,8 +50,6 @@ def run():
         print('local_rank: ', args.local_rank, flush=True)
 
     # build tokenizer
-    # import pdb;
-    # pdb.set_trace()
     tokenizer = None
 
     # setup data_loader instances
@@ -86,7 +84,7 @@ def run():
     if args.rank == 0:
         writer = SummaryWriter(log_dir=str(config.tf_dir))
 
-    trainer = Multi_Trainer_dist_PNR(args, model, loss, metrics, optimizer,
+    trainer = Multi_Trainer_dist_OSCC(args, model, loss, metrics, optimizer,
                       config=config,
                       data_loader=data_loader,
                       valid_data_loader=valid_data_loader,
@@ -140,7 +138,7 @@ if __name__ == '__main__':
         local_rank = 0
 
     args = argparse.ArgumentParser(description='PyTorch Template')
-    args.add_argument('-c', '--config', default='configs/pt/ego4d_4f_o.json', type=str,
+    args.add_argument('-c', '--config', default='configs/ft/oscc.json', type=str,
                       help='config file path (default: None)')
     args.add_argument('-r', '--resume', default=None, type=str,
                       help='path to latest checkpoint (default: None)')

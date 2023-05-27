@@ -5,9 +5,9 @@ import tqdm
 from tqdm.auto import tqdm as tqdma
 import torch.distributed as dist
 
-from base import BaseTrainer, Multi_BaseTrainer_dist
-from model.model import sim_matrix
-from utils import inf_loop
+from egovlp.base import BaseTrainer, Multi_BaseTrainer_dist
+from egovlp.model.model import sim_matrix
+from egovlp.utils import inf_loop
 
 class AllGather(torch.autograd.Function):
     """An autograd function that performs allgather on a tensor."""

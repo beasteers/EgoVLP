@@ -9,8 +9,8 @@ from sacred import Experiment
 import torch
 import model.metric as module_metric
 import data_loader.data_loader as module_data
-from utils import state_dict_data_parallel_fix
-from parse_config import ConfigParser
+from egovlp.utils import state_dict_data_parallel_fix
+from egovlp.parse_config import ConfigParser
 
 ex = Experiment('test')
 

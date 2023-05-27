@@ -7,9 +7,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoModel
 
-from base import BaseModel
-from model.video_transformer import SpaceTimeTransformer
-from utils.util import state_dict_data_parallel_fix
+from ..base import BaseModel
+from .video_transformer import SpaceTimeTransformer
+from ..utils.util import state_dict_data_parallel_fix
 
 class FrozenInTime(BaseModel):
     def __init__(self,
@@ -43,8 +43,8 @@ class FrozenInTime(BaseModel):
             arch_config = video_params.get('arch_config', 'base_patch16_224')
             vit_init = video_params.get('vit_init', 'imagenet-21k')
             if arch_config == 'base_patch16_224':
-                # vit_model = timm.models.vision_transformer.vit_base_patch16_224(pretrained=pretrained)
-                vit_model = torch.load("pretrained/jx_vit_base_p16_224-80ecf9dd.pth", map_location="cpu")
+                vit_model = timm.models.vision_transformer.vit_base_patch16_224(pretrained=pretrained)
+                # vit_model = torch.load("pretrained/jx_vit_base_p16_224-80ecf9dd.pth", map_location="cpu")
                 model = SpaceTimeTransformer(num_frames=num_frames,
                                             time_init=time_init,
                                             attention_style=attention_style)

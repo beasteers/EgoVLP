@@ -1,13 +1,13 @@
 import os
 import logging
-import pdb
+# import pdb
 from pathlib import Path
 from functools import reduce
 from operator import getitem
 from datetime import datetime
 # import pdb; pdb.set_trace()
-from logger import setup_logging
-from utils import read_json, write_json
+from .logger import setup_logging
+from .utils import read_json, write_json
 import time
 import inspect
 

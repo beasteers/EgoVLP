@@ -1,6 +1,6 @@
 import importlib
 
-from utils import Timer
+from ..utils import Timer
 
 
 class TensorboardWriter:

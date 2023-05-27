@@ -10,10 +10,10 @@ import data_loader.data_loader as module_data
 import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
-import utils.visualizer as module_vis
-from parse_config import ConfigParser
-from trainer import Multi_Trainer_dist
-from utils.util import replace_nested_dict_item
+import egovlp.utils.visualizer as module_vis
+from egovlp.parse_config import ConfigParser
+from trainer import Multi_Trainer_dist_MIR
+from egovlp.utils.util import replace_nested_dict_item
 from tensorboardX import SummaryWriter
 
 ex = Experiment('train')
@@ -51,7 +51,7 @@ def run():
 
     # build tokenizer
     tokenizer = transformers.AutoTokenizer.from_pretrained(config['arch']['args']['text_params']['model'],
-                                                               TOKENIZERS_PARALLELISM=False)
+                                                           TOKENIZERS_PARALLELISM=False)
 
     # setup data_loader instances
     data_loader, valid_data_loader = init_dataloaders(config, module_data)
@@ -85,7 +85,7 @@ def run():
     if args.rank == 0:
         writer = SummaryWriter(log_dir=str(config.tf_dir))
 
-    trainer = Multi_Trainer_dist(args, model, loss, metrics, optimizer,
+    trainer = Multi_Trainer_dist_MIR(args, model, loss, metrics, optimizer,
                       config=config,
                       data_loader=data_loader,
                       valid_data_loader=valid_data_loader,
@@ -106,7 +106,6 @@ def init_dataloaders(config, module_data):
         # then its a single dataloader
         data_loader = [config.initialize("data_loader", module_data)]
         config['data_loader']['args'] = replace_nested_dict_item(config['data_loader']['args'], 'split', 'val')
-        config['data_loader']['args'] = replace_nested_dict_item(config['data_loader']['args'], 'batch_size', 1)
         valid_data_loader = [config.initialize("data_loader", module_data)]
     elif isinstance(config["data_loader"], list):
         data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
@@ -114,7 +113,6 @@ def init_dataloaders(config, module_data):
         new_cfg_li = []
         for dl_cfg in config['data_loader']:
             dl_cfg['args'] = replace_nested_dict_item(dl_cfg['args'], 'split', 'val')
-            dl_cfg['args'] = replace_nested_dict_item(dl_cfg['args'], 'batch_size', 1)
             new_cfg_li.append(dl_cfg)
         config._config['data_loader'] = new_cfg_li
         valid_data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
@@ -131,6 +129,7 @@ if __name__ == '__main__':
         master_port = int(os.environ['MASTER_PORT'])
         world_size = int(os.environ['WORLD_SIZE'])
         rank = int(os.environ['RANK'])
+        # rank = int(os.environ['LOCAL_RANK'])
         local_rank = int(os.environ['LOCAL_RANK'])
     except:  # for debug only
         master_address = 9339
@@ -140,7 +139,7 @@ if __name__ == '__main__':
         local_rank = 0
 
     args = argparse.ArgumentParser(description='PyTorch Template')
-    args.add_argument('-c', '--config', default='configs/pt/egoclip.json', type=str,
+    args.add_argument('-c', '--config', default='configs/ft/epic.json', type=str,
                       help='config file path (default: None)')
     args.add_argument('-r', '--resume', default=None, type=str,
                       help='path to latest checkpoint (default: None)')
